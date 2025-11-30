@@ -14,17 +14,41 @@
         <a href="{% url 'home' %}" class="tab active">Все курсы</a>
         <a href="{% url 'recommended' %}" class="tab">Рекомендуемые</a>
     </div>
+    {% if courses_with_ratings %}
+    <p class="results-count">Найдено курсов: {{ courses_with_ratings|length }}</p>
+    {% endif %}
 </div>
 
 <div class="filters-section">
-    <div class="filter-label">Фильтр по платформе:</div>
-    <div class="platform-filters">
-        <a href="{% url 'home' %}" class="filter-btn {% if not selected_platform %}active{% endif %}">Все платформы</a>
-        {% for platform in platforms %}
-        <a href="?platform={{ platform.id }}" class="filter-btn {% if selected_platform == platform.id|stringformat:'s' %}active{% endif %}">
-            {{ platform.name }}
-        </a>
-        {% endfor %}
+    <div class="filters-header">
+        <h3>Фильтры</h3>
+        {% if selected_platform or selected_category %}
+        <a href="{% url 'home' %}" class="clear-filters">✕ Сбросить все</a>
+        {% endif %}
+    </div>
+    
+    <div class="filter-group">
+        <div class="filter-label">Платформа:</div>
+        <div class="platform-filters">
+            <a href="{% url 'home' %}{% if selected_category %}?category={{ selected_category }}{% endif %}" class="filter-btn {% if not selected_platform %}active{% endif %}">Все</a>
+            {% for platform in platforms %}
+            <a href="?platform={{ platform.id }}{% if selected_category %}&category={{ selected_category }}{% endif %}" class="filter-btn {% if selected_platform == platform.id|stringformat:'s' %}active{% endif %}">
+                {{ platform.name }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="filter-group">
+        <div class="filter-label">Категория:</div>
+        <div class="category-filters">
+            <a href="{% url 'home' %}{% if selected_platform %}?platform={{ selected_platform }}{% endif %}" class="filter-btn {% if not selected_category %}active{% endif %}">Все</a>
+            {% for category in categories %}
+            <a href="?category={{ category.id }}{% if selected_platform %}&platform={{ selected_platform }}{% endif %}" class="filter-btn {% if selected_category == category.id|stringformat:'s' %}active{% endif %}">
+                {{ category.name }}
+            </a>
+            {% endfor %}
+        </div>
     </div>
 </div>
 

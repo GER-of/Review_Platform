@@ -4,20 +4,27 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from .models import Platform, Course, Review, UserProfile
+from .models import Platform, Course, Review, UserProfile, Category
 from .forms import ReviewForm, UserProfileForm, CourseSubmissionForm
 
 def home(request):
     """Главная страница со списком всех курсов"""
     platform_filter = request.GET.get('platform')
+    category_filter = request.GET.get('category')
     
     # Показываем только одобренные курсы
+    courses = Course.objects.filter(is_approved=True).select_related('platform').prefetch_related('categories')
+    
+    # Фильтр по платформе
     if platform_filter:
-        courses = Course.objects.filter(platform__id=platform_filter, is_approved=True).select_related('platform')
-    else:
-        courses = Course.objects.filter(is_approved=True).select_related('platform')
+        courses = courses.filter(platform__id=platform_filter)
+    
+    # Фильтр по категории
+    if category_filter:
+        courses = courses.filter(categories__id=category_filter)
     
     platforms = Platform.objects.all()
+    categories = Category.objects.all()
     
     courses_with_ratings = []
     for course in courses:
@@ -29,7 +36,9 @@ def home(request):
     return render(request, 'home.html', {
         'courses_with_ratings': courses_with_ratings,
         'platforms': platforms,
-        'selected_platform': platform_filter
+        'categories': categories,
+        'selected_platform': platform_filter,
+        'selected_category': category_filter
     })
 
 def course_detail(request, course_id):
