@@ -16,29 +16,50 @@
 pip install -r requirements.txt
 ```
 
-### 2. Создайте миграции базы данных:
+### 2. Настройте базу данных:
+
+**Вариант A: PostgreSQL (рекомендуется для продакшена)**
+- Установите PostgreSQL
+- Создайте базу данных `course_reviews_db`
+- Настройте параметры в `project/settings.py`
+- Подробная инструкция: см. файл `POSTGRESQL_SETUP.md`
+
+**Вариант B: SQLite (для разработки)**
+- Раскомментируйте SQLite конфигурацию в `project/settings.py`
+- Закомментируйте PostgreSQL конфигурацию
+
+### 3. Создайте миграции базы данных:
 ```bash
 python manage.py makemigrations
 python manage.py migrate
 ```
 
-### 3. Создайте суперпользователя для админ-панели:
+### 4. Создайте суперпользователя для админ-панели:
 ```bash
 python manage.py createsuperuser
 ```
 
-### 4. Запустите сервер:
+### 5. Запустите сервер:
 ```bash
 python manage.py runserver
 ```
 
-### 5. Откройте в браузере:
+### 6. Откройте в браузере:
 - Главная страница: http://127.0.0.1:8000/
 - Админ-панель: http://127.0.0.1:8000/admin/
 
 ## Структура базы данных
 
-См. файл `ER_DIAGRAM.md` для подробной ER-диаграммы.
+### Документация:
+- `ER_DIAGRAM.md` - подробное текстовое описание базы данных
+- `uml_diagram_ru.puml` - UML диаграмма на русском языке (PlantUML)
+- `uml_diagram_en.puml` - UML diagram in English (PlantUML)
+- `UML_DIAGRAMS_README.md` - инструкция по работе с UML диаграммами
+
+### Просмотр UML диаграмм:
+1. Online: http://www.plantuml.com/plantuml/uml/ (скопируйте содержимое .puml файла)
+2. VS Code: установите расширение "PlantUML" и откройте .puml файл
+3. Локально: установите PlantUML и выполните `plantuml uml_diagram_ru.puml`
 
 ### Модели:
 
@@ -120,5 +141,7 @@ python manage.py runserver
 ## Технологии
 
 - Django 5.2.6
-- SQLite
-- HTML/CSS
+- PostgreSQL (или SQLite для разработки)
+- psycopg2-binary (PostgreSQL адаптер)
+- Pillow (обработка изображений)
+- HTML/CSS/JavaScript
