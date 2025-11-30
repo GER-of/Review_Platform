@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Редактировать профиль{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{% url 'home' %}">Главная</a> / <a href="{% url 'profile' %}">Профиль</a> / Редактировать
+</div>
+
+<div class="auth-page">
+    <div class="auth-container" style="max-width: 600px;">
+        <h1>Редактировать профиль</h1>
+        <p class="auth-subtitle">Настройте свой профиль</p>
+        
+        <form method="post" enctype="multipart/form-data" class="auth-form">
+            {% csrf_token %}
+            
+            <div class="current-avatar">
+                {% if user.profile.avatar %}
+                <img src="{{ user.profile.avatar.url }}" alt="Текущий аватар" class="avatar-preview">
+                {% else %}
+                <div class="avatar-preview-placeholder">
+                    {{ user.username|slice:":1"|upper }}
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.avatar.id_for_label }}">{{ form.avatar.label }}</label>
+                {{ form.avatar }}
+                {% if form.avatar.errors %}
+                <div class="form-error">{{ form.avatar.errors }}</div>
+                {% endif %}
+                <small class="form-help">Загрузите изображение (JPG, PNG). Рекомендуемый размер: 200x200px</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.bio.id_for_label }}">{{ form.bio.label }}</label>
+                {{ form.bio }}
+                {% if form.bio.errors %}
+                <div class="form-error">{{ form.bio.errors }}</div>
+                {% endif %}
+                <small class="form-help">Максимум 500 символов</small>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">Сохранить изменения</button>
+                <a href="{% url 'profile' %}" class="btn-cancel">Отмена</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

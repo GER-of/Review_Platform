@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load review_tags %}
+
+{% block title %}Отзывы о курсах{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{% url 'home' %}">Главная</a> / Отзывы о курсах
+</div>
+
+<div class="page-header">
+    <h1>Отзывы о курсах</h1>
+    <div class="tabs">
+        <a href="{% url 'home' %}" class="tab active">Все курсы</a>
+        <a href="{% url 'recommended' %}" class="tab">Рекомендуемые</a>
+    </div>
+    <p class="subtitle">💡 Что влияет на рейтинг</p>
+</div>
+
+<div class="filters-section">
+    <div class="filter-label">Фильтр по платформе:</div>
+    <div class="platform-filters">
+        <a href="{% url 'home' %}" class="filter-btn {% if not selected_platform %}active{% endif %}">Все платформы</a>
+        {% for platform in platforms %}
+        <a href="?platform={{ platform.id }}" class="filter-btn {% if selected_platform == platform.id|stringformat:'s' %}active{% endif %}">
+            {{ platform.name }}
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="search-box">
+    <input type="text" class="search-input" placeholder="Введите название курса" id="searchInput">
+</div>
+
+<div class="courses-list" id="coursesList">
+    {% for item in courses_with_ratings %}
+    <div class="course-card" data-name="{{ item.course.name|lower }}">
+        <div class="course-icon" style="background: {% cycle '#4CAF50' '#2196F3' '#FF9800' '#9C27B0' '#F44336' %};">
+            {{ item.course.name|slice:":2"|upper }}
+        </div>
+        <div class="course-content">
+            <div class="course-header">
+                <div>
+                    <a href="{% url 'course_detail' item.course.id %}" class="course-title">{{ item.course.name }}</a>
+                    <div class="course-rating">
+                        <span class="star-icon">★</span>
+                        <span class="rating-number">{{ item.avg_rating|floatformat:1 }}</span>
+                        <span class="reviews-count">{{ item.course.reviews.count|pluralize_reviews }}</span>
+                    </div>
+                </div>
+            </div>
+            <p class="course-description">{{ item.course.description|truncatewords:30 }}</p>
+            <p class="course-platform">
+                <span class="platform-badge">{{ item.course.platform.name }}</span>
+                {% if item.course.course_url %}
+                <a href="{{ item.course.course_url }}" target="_blank" class="course-link">🔗 Перейти на курс</a>
+                {% endif %}
+            </p>
+            <div class="course-actions">
+                <a href="{% url 'course_detail' item.course.id %}" class="btn-primary">Читать отзывы</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="no-data">Курсы пока не добавлены</div>
+    {% endfor %}
+</div>
+
+<script>
+document.getElementById('searchInput').addEventListener('input', function(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    const cards = document.querySelectorAll('.course-card');
+    
+    cards.forEach(card => {
+        const courseName = card.getAttribute('data-name');
+        if (courseName.includes(searchTerm)) {
+            card.style.display = 'flex';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+});
+</script>
+{% endblock %}

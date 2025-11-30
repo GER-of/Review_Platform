@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load review_tags %}
+
+{% block title %}Рекомендуемые курсы{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{% url 'home' %}">Главная</a> / Рекомендуемые курсы
+</div>
+
+<div class="page-header">
+    <h1>Рекомендуемые курсы</h1>
+    <div class="tabs">
+        <a href="{% url 'home' %}" class="tab">Все курсы</a>
+        <a href="{% url 'recommended' %}" class="tab active">Рекомендуемые</a>
+    </div>
+    <p class="subtitle">⭐ Курсы с оценкой выше 4.5</p>
+</div>
+
+<div class="courses-list">
+    {% for item in recommended %}
+    <div class="course-card">
+        <div class="course-icon" style="background: #4CAF50;">
+            {{ item.course.name|slice:":2"|upper }}
+        </div>
+        <div class="course-content">
+            <div class="course-header">
+                <div>
+                    <a href="{% url 'course_detail' item.course.id %}" class="course-title">{{ item.course.name }}</a>
+                    <div class="course-rating">
+                        <span class="star-icon">★</span>
+                        <span class="rating-number">{{ item.avg_rating|floatformat:1 }}</span>
+                        <span class="reviews-count">{{ item.course.reviews.count|pluralize_reviews }}</span>
+                    </div>
+                </div>
+            </div>
+            <p class="course-description">{{ item.course.description|truncatewords:30 }}</p>
+            <p class="course-platform">
+                <span class="platform-badge">{{ item.course.platform.name }}</span>
+                {% if item.course.course_url %}
+                <a href="{{ item.course.course_url }}" target="_blank" class="course-link">🔗 Перейти на курс</a>
+                {% endif %}
+            </p>
+            <div class="course-actions">
+                <a href="{% url 'course_detail' item.course.id %}" class="btn-primary">Читать отзывы</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="no-data">Рекомендуемых курсов пока нет. Добавьте курсы с высокими оценками!</div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load review_tags %}
+
+{% block title %}Профиль - {{ user.username }}{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{% url 'home' %}">Главная</a> / Профиль
+</div>
+
+<div class="profile-page">
+    <div class="profile-header">
+        {% if user.profile.avatar %}
+        <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}" class="profile-avatar-img">
+        {% else %}
+        <div class="profile-avatar">
+            {{ user.username|slice:":1"|upper }}
+        </div>
+        {% endif %}
+        <div class="profile-info">
+            <h1>{{ user.username }}</h1>
+            {% if user.profile.bio %}
+            <p class="profile-bio">{{ user.profile.bio }}</p>
+            {% endif %}
+            <p class="profile-stats">{{ user_reviews.count|pluralize_reviews }}</p>
+            <p class="profile-date">Дата регистрации: {{ user.date_joined|date:"d.m.Y" }}</p>
+            <a href="{% url 'edit_profile' %}" class="btn-edit-profile">✏️ Редактировать профиль</a>
+        </div>
+    </div>
+    
+    <div class="profile-reviews">
+        <h2 class="section-title">Мои отзывы</h2>
+        
+        {% for review in user_reviews %}
+        <div class="profile-review-card">
+            <div class="review-course-info">
+                <a href="{% url 'course_detail' review.course.id %}" class="review-course-title">
+                    {{ review.course.name }}
+                </a>
+                <span class="platform-badge">{{ review.course.platform.name }}</span>
+            </div>
+            
+            <div class="review-content">
+                <div class="review-header">
+                    <div class="review-rating">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= review.rating %}
+                                <span class="star filled">★</span>
+                            {% else %}
+                                <span class="star">☆</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <span class="review-date">{{ review.created_at|date:"d.m.Y" }}</span>
+                </div>
+                <p class="review-text">{{ review.text }}</p>
+            </div>
+        </div>
+        {% empty %}
+        <div class="no-data">
+            <p>Вы еще не оставили ни одного отзыва.</p>
+            <a href="{% url 'home' %}" class="btn-primary">Посмотреть курсы</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
