@@ -18,7 +18,13 @@
                         <li><a href="{% url 'all_reviews' %}">ВСЕ ОТЗЫВЫ</a></li>
                         {% if user.is_authenticated %}
                         <li><a href="{% url 'add_course' %}">➕ ДОБАВИТЬ КУРС</a></li>
-                        <li><a href="{% url 'profile' %}">👤 {{ user.username }}</a></li>
+                        <li>
+                            <a href="{% url 'profile' %}" class="nav-profile-link">
+                                {% load review_tags %}
+                                <img src="{% user_avatar user %}" alt="{{ user.username }}" class="nav-avatar">
+                                <span>{{ user.username }}</span>
+                            </a>
+                        </li>
                         <li><a href="{% url 'logout' %}" class="nav-button">ВЫЙТИ</a></li>
                         {% else %}
                         <li><a href="{% url 'login' %}">ВОЙТИ</a></li>
