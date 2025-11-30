@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Добавить курс{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{% url 'home' %}">Главная</a> / Добавить курс
+</div>
+
+<div class="auth-page">
+    <div class="auth-container" style="max-width: 700px;">
+        <h1>Добавить курс</h1>
+        <p class="auth-subtitle">Предложите курс для добавления на сайт</p>
+        
+        <div class="info-box">
+            <p>📝 Ваш курс будет отправлен на модерацию. После одобрения администратором он появится на сайте.</p>
+        </div>
+        
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+                {{ form.name }}
+                {% if form.name.errors %}
+                <div class="form-error">{{ form.name.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.platform.id_for_label }}">{{ form.platform.label }}</label>
+                {{ form.platform }}
+                {% if form.platform.errors %}
+                <div class="form-error">{{ form.platform.errors }}</div>
+                {% endif %}
+                <small class="form-help">Выберите платформу, на которой размещен курс</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.course_url.id_for_label }}">{{ form.course_url.label }}</label>
+                {{ form.course_url }}
+                {% if form.course_url.errors %}
+                <div class="form-error">{{ form.course_url.errors }}</div>
+                {% endif %}
+                <small class="form-help">{{ form.course_url.help_text }}</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                <div class="form-error">{{ form.description.errors }}</div>
+                {% endif %}
+                <small class="form-help">Расскажите подробно о курсе, его содержании и особенностях</small>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">Отправить на модерацию</button>
+                <a href="{% url 'home' %}" class="btn-cancel">Отмена</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

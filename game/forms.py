@@ -1,5 +1,5 @@
 from django import forms
-from .models import Review, UserProfile
+from .models import Review, UserProfile, Course
 
 class ReviewForm(forms.ModelForm):
     """Форма для создания отзыва"""
@@ -36,4 +36,38 @@ class UserProfileForm(forms.ModelForm):
         labels = {
             'bio': 'О себе',
             'avatar': 'Аватар'
+        }
+
+class CourseSubmissionForm(forms.ModelForm):
+    """Форма для добавления курса пользователем"""
+    
+    class Meta:
+        model = Course
+        fields = ['name', 'platform', 'description', 'course_url']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-input',
+                'placeholder': 'Название курса'
+            }),
+            'platform': forms.Select(attrs={
+                'class': 'form-input'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-textarea',
+                'placeholder': 'Подробное описание курса...',
+                'rows': 5
+            }),
+            'course_url': forms.URLInput(attrs={
+                'class': 'form-input',
+                'placeholder': 'https://example.com/course'
+            }),
+        }
+        labels = {
+            'name': 'Название курса',
+            'platform': 'Платформа',
+            'description': 'Описание',
+            'course_url': 'Ссылка на курс'
+        }
+        help_texts = {
+            'course_url': 'Прямая ссылка на страницу курса'
         }

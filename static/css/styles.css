@@ -490,6 +490,27 @@ main {
     margin-bottom: 15px;
 }
 
+.review-with-avatar {
+    display: flex;
+    gap: 15px;
+}
+
+.review-avatar {
+    flex-shrink: 0;
+}
+
+.avatar-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e5e5e5;
+}
+
+.review-content-wrapper {
+    flex: 1;
+}
+
 .review-header {
     display: flex;
     justify-content: space-between;
@@ -527,6 +548,27 @@ main {
 .review-date {
     color: #999;
     font-size: 0.85rem;
+}
+
+/* Responsive design for reviews */
+@media (max-width: 768px) {
+    .review-with-avatar {
+        gap: 10px;
+    }
+    
+    .avatar-img {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .review-header {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .review-author {
+        font-size: 0.9rem;
+    }
 }
 
 .no-data {
@@ -641,12 +683,29 @@ footer p {
     margin-bottom: 30px;
 }
 
+.info-box {
+    background: #e3f2fd;
+    border: 1px solid #90caf9;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 25px;
+}
+
+.info-box p {
+    margin: 0;
+    color: #1565c0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
 .auth-form {
     margin-bottom: 20px;
 }
 
 .auth-form input[type="text"],
-.auth-form input[type="password"] {
+.auth-form input[type="password"],
+.auth-form input[type="url"],
+.auth-form select {
     width: 100%;
     padding: 10px 15px;
     border: 1px solid #e5e5e5;

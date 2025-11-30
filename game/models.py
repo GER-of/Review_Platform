@@ -51,6 +51,8 @@ class Course(models.Model):
     platform = models.ForeignKey(Platform, on_delete=models.CASCADE, related_name='courses', verbose_name="Платформа")
     description = models.TextField(verbose_name="Описание курса")
     course_url = models.URLField(verbose_name="Ссылка на курс", blank=True, help_text="Ссылка на страницу курса")
+    created_by = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='created_courses', verbose_name="Создатель")
+    is_approved = models.BooleanField(default=False, verbose_name="Одобрен")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     
     class Meta:
@@ -59,7 +61,8 @@ class Course(models.Model):
         ordering = ['-created_at']
     
     def __str__(self):
-        return f"{self.name} ({self.platform.name})"
+        status = "✓" if self.is_approved else "⏳"
+        return f"{status} {self.name} ({self.platform.name})"
     
     def average_rating(self):
         """Вычисляет среднюю оценку курса"""

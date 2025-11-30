@@ -25,3 +25,13 @@ def pluralize_reviews(count):
         return f"{count} отзыва"
     else:
         return f"{count} отзывов"
+
+@register.simple_tag
+def user_avatar(user, size='50'):
+    """
+    Возвращает URL аватара пользователя или дефолтное изображение
+    Использование: {% user_avatar review.user %}
+    """
+    if user and hasattr(user, 'profile') and user.profile.avatar:
+        return user.profile.avatar.url
+    return '/static/images/default-avatar.svg'

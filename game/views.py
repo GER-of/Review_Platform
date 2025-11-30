@@ -5,16 +5,17 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from .models import Platform, Course, Review, UserProfile
-from .forms import ReviewForm, UserProfileForm
+from .forms import ReviewForm, UserProfileForm, CourseSubmissionForm
 
 def home(request):
     """Главная страница со списком всех курсов"""
     platform_filter = request.GET.get('platform')
     
+    # Показываем только одобренные курсы
     if platform_filter:
-        courses = Course.objects.filter(platform__id=platform_filter).select_related('platform')
+        courses = Course.objects.filter(platform__id=platform_filter, is_approved=True).select_related('platform')
     else:
-        courses = Course.objects.all().select_related('platform')
+        courses = Course.objects.filter(is_approved=True).select_related('platform')
     
     platforms = Platform.objects.all()
     
@@ -63,7 +64,7 @@ def course_detail(request, course_id):
 
 def recommended_courses(request):
     """Страница рекомендуемых курсов (оценка выше 4.5)"""
-    courses = Course.objects.all().select_related('platform')
+    courses = Course.objects.filter(is_approved=True).select_related('platform')
     recommended = []
     for course in courses:
         avg_rating = course.average_rating()
@@ -73,6 +74,23 @@ def recommended_courses(request):
                 'avg_rating': avg_rating
             })
     return render(request, 'recommended.html', {'recommended': recommended})
+
+@login_required
+def add_course(request):
+    """Добавление курса пользователем"""
+    if request.method == 'POST':
+        form = CourseSubmissionForm(request.POST)
+        if form.is_valid():
+            course = form.save(commit=False)
+            course.created_by = request.user
+            course.is_approved = False  # Требует одобрения администратора
+            course.save()
+            messages.success(request, 'Спасибо! Ваш курс отправлен на модерацию. После одобрения администратором он появится на сайте.')
+            return redirect('home')
+    else:
+        form = CourseSubmissionForm()
+    
+    return render(request, 'add_course.html', {'form': form})
 
 def register(request):
     """Регистрация нового пользователя"""

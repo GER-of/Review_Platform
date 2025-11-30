@@ -79,20 +79,27 @@
         
         {% for review in reviews %}
         <div class="review-card">
-            <div class="review-header">
-                <span class="review-author">{{ review.author_name }}</span>
-                <div class="review-rating">
-                    {% for i in "12345" %}
-                        {% if forloop.counter <= review.rating %}
-                            <span class="star filled">★</span>
-                        {% else %}
-                            <span class="star">☆</span>
-                        {% endif %}
-                    {% endfor %}
+            <div class="review-with-avatar">
+                <div class="review-avatar">
+                    <img src="{% user_avatar review.user %}" alt="{{ review.author_name }}" class="avatar-img">
+                </div>
+                <div class="review-content-wrapper">
+                    <div class="review-header">
+                        <span class="review-author">{{ review.author_name }}</span>
+                        <div class="review-rating">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= review.rating %}
+                                    <span class="star filled">★</span>
+                                {% else %}
+                                    <span class="star">☆</span>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <p class="review-text">{{ review.text }}</p>
+                    <p class="review-date">{{ review.created_at|date:"d.m.Y" }}</p>
                 </div>
             </div>
-            <p class="review-text">{{ review.text }}</p>
-            <p class="review-date">{{ review.created_at|date:"d.m.Y" }}</p>
         </div>
         {% empty %}
         <div class="no-data">Отзывов пока нет. Будьте первым!</div>

@@ -16,6 +16,7 @@
                         <li><a href="{% url 'home' %}">ВСЕ КУРСЫ</a></li>
                         <li><a href="{% url 'recommended' %}">РЕКОМЕНДУЕМЫЕ</a></li>
                         {% if user.is_authenticated %}
+                        <li><a href="{% url 'add_course' %}">➕ ДОБАВИТЬ КУРС</a></li>
                         <li><a href="{% url 'profile' %}">👤 {{ user.username }}</a></li>
                         <li><a href="{% url 'logout' %}" class="nav-button">ВЫЙТИ</a></li>
                         {% else %}
