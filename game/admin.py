@@ -1,10 +1,17 @@
 from django.contrib import admin
-from .models import Platform, Course, Review, UserProfile
+from .models import Platform, Course, Review, UserProfile, Category
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'created_at')
     search_fields = ('user__username',)
+    list_filter = ('created_at',)
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'slug', 'created_at')
+    search_fields = ('name',)
+    prepopulated_fields = {'slug': ('name',)}
     list_filter = ('created_at',)
 
 @admin.register(Platform)
@@ -17,8 +24,9 @@ class PlatformAdmin(admin.ModelAdmin):
 class CourseAdmin(admin.ModelAdmin):
     list_display = ('name', 'platform', 'is_approved', 'created_by', 'created_at')
     search_fields = ('name', 'platform__name', 'created_by__username')
-    list_filter = ('is_approved', 'platform', 'created_at')
+    list_filter = ('is_approved', 'platform', 'categories', 'created_at')
     list_select_related = ('platform', 'created_by')
+    filter_horizontal = ('categories',)
     actions = ['approve_courses', 'reject_courses']
     
     def approve_courses(self, request, queryset):

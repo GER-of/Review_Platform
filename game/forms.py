@@ -43,7 +43,7 @@ class CourseSubmissionForm(forms.ModelForm):
     
     class Meta:
         model = Course
-        fields = ['name', 'platform', 'description', 'course_url']
+        fields = ['name', 'platform', 'categories', 'description', 'course_url']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': 'form-input',
@@ -52,6 +52,7 @@ class CourseSubmissionForm(forms.ModelForm):
             'platform': forms.Select(attrs={
                 'class': 'form-input'
             }),
+            'categories': forms.CheckboxSelectMultiple(),
             'description': forms.Textarea(attrs={
                 'class': 'form-textarea',
                 'placeholder': 'Подробное описание курса...',
@@ -65,9 +66,11 @@ class CourseSubmissionForm(forms.ModelForm):
         labels = {
             'name': 'Название курса',
             'platform': 'Платформа',
+            'categories': 'Категории',
             'description': 'Описание',
             'course_url': 'Ссылка на курс'
         }
         help_texts = {
-            'course_url': 'Прямая ссылка на страницу курса'
+            'course_url': 'Прямая ссылка на страницу курса',
+            'categories': 'Выберите одну или несколько категорий'
         }

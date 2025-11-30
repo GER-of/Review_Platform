@@ -214,6 +214,22 @@ main {
     margin-bottom: 15px;
 }
 
+.course-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.category-tag {
+    background: #f0f0f0;
+    color: #666;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
 .course-platform {
     display: flex;
     align-items: center;
@@ -696,6 +712,79 @@ footer p {
     color: #1565c0;
     font-size: 0.9rem;
     line-height: 1.5;
+}
+
+.categories-checkboxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid #e5e5e5;
+    border-radius: 6px;
+    background: #f9f9f9;
+}
+
+.categories-checkboxes label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.categories-checkboxes input[type="checkbox"] {
+    cursor: pointer;
+}
+
+/* All reviews page */
+.all-reviews-page {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.review-card-full {
+    background: white;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.review-author-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.review-separator {
+    color: #ccc;
+}
+
+.review-course-link {
+    color: #0066ff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.review-course-link:hover {
+    text-decoration: underline;
+}
+
+.review-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.platform-badge-small {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
 }
 
 .auth-form {

@@ -50,6 +50,13 @@
                 </div>
             </div>
             <p class="course-description">{{ item.course.description|truncatewords:30 }}</p>
+            {% if item.course.categories.all %}
+            <div class="course-categories">
+                {% for category in item.course.categories.all %}
+                <span class="category-tag">{{ category.name }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
             <p class="course-platform">
                 <span class="platform-badge">{{ item.course.platform.name }}</span>
                 {% if item.course.course_url %}

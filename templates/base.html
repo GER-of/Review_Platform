@@ -15,6 +15,7 @@
                     <ul>
                         <li><a href="{% url 'home' %}">ВСЕ КУРСЫ</a></li>
                         <li><a href="{% url 'recommended' %}">РЕКОМЕНДУЕМЫЕ</a></li>
+                        <li><a href="{% url 'all_reviews' %}">ВСЕ ОТЗЫВЫ</a></li>
                         {% if user.is_authenticated %}
                         <li><a href="{% url 'add_course' %}">➕ ДОБАВИТЬ КУРС</a></li>
                         <li><a href="{% url 'profile' %}">👤 {{ user.username }}</a></li>

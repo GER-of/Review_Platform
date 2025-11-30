@@ -30,6 +30,21 @@ def save_user_profile(sender, instance, **kwargs):
     if hasattr(instance, 'profile'):
         instance.profile.save()
 
+class Category(models.Model):
+    """Модель категории курса"""
+    name = models.CharField(max_length=100, verbose_name="Название категории", unique=True)
+    slug = models.SlugField(max_length=100, unique=True, verbose_name="URL slug")
+    description = models.TextField(verbose_name="Описание категории", blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+    
+    class Meta:
+        verbose_name = "Категория"
+        verbose_name_plural = "Категории"
+        ordering = ['name']
+    
+    def __str__(self):
+        return self.name
+
 class Platform(models.Model):
     """Модель платформы/онлайн-школы"""
     name = models.CharField(max_length=100, verbose_name="Название платформы", unique=True)
@@ -49,6 +64,7 @@ class Course(models.Model):
     """Модель курса"""
     name = models.CharField(max_length=200, verbose_name="Название курса")
     platform = models.ForeignKey(Platform, on_delete=models.CASCADE, related_name='courses', verbose_name="Платформа")
+    categories = models.ManyToManyField(Category, related_name='courses', verbose_name="Категории", blank=True)
     description = models.TextField(verbose_name="Описание курса")
     course_url = models.URLField(verbose_name="Ссылка на курс", blank=True, help_text="Ссылка на страницу курса")
     created_by = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='created_courses', verbose_name="Создатель")

@@ -85,12 +85,21 @@ def add_course(request):
             course.created_by = request.user
             course.is_approved = False  # Требует одобрения администратора
             course.save()
+            form.save_m2m()  # Сохраняем ManyToMany связи (категории)
             messages.success(request, 'Спасибо! Ваш курс отправлен на модерацию. После одобрения администратором он появится на сайте.')
             return redirect('home')
     else:
         form = CourseSubmissionForm()
     
     return render(request, 'add_course.html', {'form': form})
+
+def all_reviews(request):
+    """Страница со всеми отзывами"""
+    reviews = Review.objects.select_related('course', 'course__platform', 'user').filter(course__is_approved=True).order_by('-created_at')
+    
+    return render(request, 'all_reviews.html', {
+        'reviews': reviews
+    })
 
 def register(request):
     """Регистрация нового пользователя"""

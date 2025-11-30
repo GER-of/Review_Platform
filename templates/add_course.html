@@ -37,6 +37,17 @@
             </div>
             
             <div class="form-group">
+                <label>{{ form.categories.label }}</label>
+                <div class="categories-checkboxes">
+                    {{ form.categories }}
+                </div>
+                {% if form.categories.errors %}
+                <div class="form-error">{{ form.categories.errors }}</div>
+                {% endif %}
+                <small class="form-help">{{ form.categories.help_text }}</small>
+            </div>
+            
+            <div class="form-group">
                 <label for="{{ form.course_url.id_for_label }}">{{ form.course_url.label }}</label>
                 {{ form.course_url }}
                 {% if form.course_url.errors %}
